@@ -5,3 +5,22 @@
 #mainCanvas {
     margin: auto;
 }
+
+
+.queue {
+display: flex;
+flex-direction: row;
+gap: 10px;
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+
+.queue-element {
+background-color: #f9f9f9;
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 5px;
+cursor: move;
+display: inline-block
+}

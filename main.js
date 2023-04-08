@@ -130,26 +130,12 @@ function multiplyMatrices(A, B) {
     table.remove();
     mainFunc();
   }
-/*
-  function generateIdentityMatrixElement() {
-    const el = document.createElement('div');
-    const table = document.createElement('table');
-    const button = document.createElement('button');
-    el.appendChild(table);
-    el.appendChild(button);
-    button.addEventListener('click', () => {removeMatrix(button)});
-    for (let i = 0; i < 3; i++) {
-      const row = document.createElement('tr');
-      for (let j = 0; j < 3; j++) {
-        const td = document.createElement('td')
-      }
-      table.appendChild(row);
-    }
-  }
-*/
+
   function addNewMatrix() {
     const queue = document.getElementById('queue')
     const div = document.createElement('div');
+    div.className = 'queue-element';
+    div.draggable = 'true';
     div.innerHTML = `
         <table>
             <tr>
@@ -169,7 +155,30 @@ function multiplyMatrices(A, B) {
             </tr>
         </table>
         <button onclick="removeMatrix(this)">X</button>
+        <button onclick="moveLeft(this)">&lt</button>
+        <button onclick="moveRight(this)">&gt</button>
     `
     queue.appendChild(div);
     mainFunc();
   }
+
+  function moveLeft(el) {
+    el = el.parentElement;
+    const parent = el.parentElement;
+    parent.insertBefore(el, el.previousElementSibling);
+    mainFunc();
+  } 
+
+  function moveRight(el) {
+    el = el.parentElement;
+    const parent = el.parentElement;
+
+    if (el.nextElementSibling) {
+      el.nextElementSibling.after(el);
+    }else {
+      parent.insertBefore(el, parent.children[0]);
+    }
+    mainFunc();
+  }
+
+  
