@@ -32,10 +32,6 @@ function mainFunc() {
     
     ctx.fillStyle = '#f00';
     ctx.beginPath();
-    // ctx.moveTo(0, 0);
-    // ctx.lineTo(-50,0);
-    // ctx.lineTo(-50, 50);
-    // ctx.lineTo(0, 50);
     ctx.moveTo(ogCoords[0][0], ogCoords[0][1]);
     ctx.lineTo(ogCoords[1][0], ogCoords[1][1]);
     ctx.lineTo(ogCoords[2][0], ogCoords[2][1]);
@@ -44,19 +40,19 @@ function mainFunc() {
     ctx.closePath();
     ctx.fill();
 
-    // za transliranje treba da se pomnozi sa grid_size
-    // matrix = [[1,0,grid_size*5],
-    //           [0,1,-grid_size*8]]
-    // matrix = [[Math.cos(Math.PI/4) ,-Math.sin(Math.PI/4) ,grid_size*5],
-    //           [Math.sin(Math.PI/4) , Math.cos(Math.PI/4) ,-grid_size*8],
-    //           [                 0,                     0 ,           1 ]]
     const newCoords = new Array(4)
 
-    let matrix = loadMatrix();
+    // let matrix = loadMatrix();
+
+
+    matrices = loadMatrices()
+
+    matrix = composeMatrices(matrices) 
+
+
     matrix[0][2] = matrix[0][2]*grid_size
     matrix[1][2] = -matrix[1][2]*grid_size
     
- //   console.log(matrix)
     for (let i = 0; i < newCoords.length; i++) {
         newCoords[i] = new Array(3)
         newCoords[i] = calculateTransformation(matrix, ogCoords[i])  
@@ -64,10 +60,6 @@ function mainFunc() {
 
     ctx.fillStyle = '#0f0';
     ctx.beginPath();
-    // ctx.moveTo(0, 0);
-    // ctx.lineTo(50,0);
-    // ctx.lineTo(50, -50);
-    // ctx.lineTo(0, -50);
     ctx.moveTo(newCoords[0][0], newCoords[0][1]);
     ctx.lineTo(newCoords[1][0], newCoords[1][1]);
     ctx.lineTo(newCoords[2][0], newCoords[2][1]);
@@ -83,6 +75,15 @@ function calculateTransformation (matrix, ogCoords) {
     newCoords[0] = ogCoords[0] * matrix[0][0] + ogCoords[1] * matrix[0][1] + matrix[0][2]
     newCoords[1] = ogCoords[0] * matrix[1][0] + ogCoords[1] * matrix[1][1] + matrix[1][2]
     return newCoords
+}
+
+function composeMatrices(matrices){
+  currentMatrix = [[1,0,0],[0,1,0],[0,0,1]]
+
+  for(m of matrices ) {
+    currentMatrix = multiplyMatrices(currentMatrix, m)
+  }
+  return currentMatrix
 }
 
 function multiplyMatrices(A, B) {
@@ -103,9 +104,21 @@ function multiplyMatrices(A, B) {
     return C;
   }
 
-  function loadMatrix() {
+  function loadMatrices () {
+    const queue = document.getElementById('queue')
+    //console.log(queue.childNodes)
+    matrices = []
+    for( matrix of queue.children ) {
+      console.log(matrix)
+      matrices.push( loadMatrix(matrix) )
+
+    }
+    return matrices
+  }
+  
+
+  function loadMatrix(m) {
     let matrix = new Array(3)
-    m = document.getElementById("m1")
   //  console.log(document.getElementById("m1").rows[0].cells[2].children[0].value)
     for(let i = 0; i < 2; i++){
         matrix[i] = new Array(3)

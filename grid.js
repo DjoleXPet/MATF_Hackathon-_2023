@@ -2,8 +2,6 @@ window.addEventListener('load', addGrid);
 
 function addGrid() {
     var grid_size = 15;
-// var x_axis_distance_grid_lines = 5;
-// var y_axis_distance_grid_lines = 5;
 var x_axis_starting_point = { number: 1, suffix: '' };
 var y_axis_starting_point = { number: 1, suffix: '' };
 
