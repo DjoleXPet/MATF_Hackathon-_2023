@@ -1,19 +1,13 @@
-window.addEventListener('load', mainFunc);
+window.addEventListener('load', () => {
+  mainFunc();
+  const addMatrixButton = document.getElementById('addMatrix');
+   addMatrixButton.addEventListener('click', addNewMatrix);
 
+   addNewMatrix();
+});
 
-document.querySelectorAll('table input').forEach(item => {
-  item.addEventListener('change', event => {
-    mainFunc();
-  })
-})
 
 function mainFunc() {
-    /*const poly = document.getElementById('mainPoly');
-    points = [200, 10, 250, 190, 360, 210];
-    poly.setAttribute('points', `${points[0]},${points[1]} ${points[2]},${points[3]} ${points[4]},${points[5]}`);*/
-
-    
-
     const grid_size = 15
 
     // const ogCoords = [[0 * grid_size,0 * grid_size],[5 * grid_size,0 * grid_size],
@@ -109,8 +103,8 @@ function multiplyMatrices(A, B) {
     //console.log(queue.childNodes)
     matrices = []
     for( matrix of queue.children ) {
-      console.log(matrix)
-      matrices.push( loadMatrix(matrix) )
+      //console.log(matrix)
+      matrices.push( loadMatrix(matrix.children[0]) )
 
     }
     return matrices
@@ -130,3 +124,52 @@ function multiplyMatrices(A, B) {
 
     return matrix
     }
+
+  function removeMatrix(el) {
+    const table = el.parentElement;
+    table.remove();
+    mainFunc();
+  }
+/*
+  function generateIdentityMatrixElement() {
+    const el = document.createElement('div');
+    const table = document.createElement('table');
+    const button = document.createElement('button');
+    el.appendChild(table);
+    el.appendChild(button);
+    button.addEventListener('click', () => {removeMatrix(button)});
+    for (let i = 0; i < 3; i++) {
+      const row = document.createElement('tr');
+      for (let j = 0; j < 3; j++) {
+        const td = document.createElement('td')
+      }
+      table.appendChild(row);
+    }
+  }
+*/
+  function addNewMatrix() {
+    const queue = document.getElementById('queue')
+    const div = document.createElement('div');
+    div.innerHTML = `
+        <table>
+            <tr>
+                <td><input type="number" onchange="mainFunc()" name=""  value="1"></td>
+                <td><input type="number" onchange="mainFunc()" name=""  value="0"></td>
+                <td><input type="number" onchange="mainFunc()" name=""  value="0"></td>
+            </tr>
+            <tr>
+                <td><input type="number" onchange="mainFunc()" name=""  value="0"></td>
+                <td><input type="number" onchange="mainFunc()" name=""  value="1"></td>
+                <td><input type="number" onchange="mainFunc()" name=""  value="0"></td>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+            </tr>
+        </table>
+        <button onclick="removeMatrix(this)">X</button>
+    `
+    queue.appendChild(div);
+    mainFunc();
+  }
