@@ -155,6 +155,11 @@ function multiplyMatrices(A, B) {
       matrix[0] = [s1, 0, 0 ]
       matrix[1] = [0, s2, 0 ]
     }
+    else if(m.className == 'reflection') {
+      a1 = +m.children[0].value
+      a2 = +m.children[1].value
+      matrix = getReflexionMatrix([a1, a2])
+    }
     else{
       for(let i = 0; i < 2; i++){
         matrix[i] = new Array(3)
@@ -217,7 +222,7 @@ function multiplyMatrices(A, B) {
         break;
     
       case 'reflection':
-      addCustomMatrix()
+        addReflectionMatrix()
       break;
   
       case 'scaling':
@@ -321,6 +326,26 @@ function addScaleMatrix() {
   div.innerHTML = `
       <div class="scaling" style="display:inline-block">
       S(
+      <input type='number' onchange="mainFunc()" value='1'>
+      <input type='number' onchange="mainFunc()" value='1'>
+      )
+      </div>
+      <br><br>
+      <button onclick="removeMatrix(this)">X</button>
+      <button onclick="moveLeft(this)">&lt</button>
+      <button onclick="moveRight(this)">&gt</button>
+  `
+  queue.appendChild(div);
+  mainFunc();
+}
+
+function addReflectionMatrix() {
+  const queue = document.getElementById('queue')
+  const div = document.createElement('div');
+  div.className = 'queue-element';
+  div.innerHTML = `
+      <div class="reflection" style="display:inline-block">
+      Ref(
       <input type='number' onchange="mainFunc()" value='1'>
       <input type='number' onchange="mainFunc()" value='1'>
       )
