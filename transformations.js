@@ -3,6 +3,10 @@ function getRotationMatrix(alpha) {
     return [[Math.cos(alpha), -Math.sin(alpha), 0], [Math.sin(alpha), Math.cos(alpha), 0], [0, 0, 1]];
 }
 
+function randInt(max) {
+    return Math.ceil(Math.random()*max);
+}
+
 function getTranslationMatrix(vector) {
     let x = vector[0];
     let y = vector[1];
@@ -54,12 +58,11 @@ function multiplyMatrices(A, B) {
 }
 
 function getRandomMatrix() {
-    let m = [getReflexionMatrix([randInt(5), randInt(5)])
-            ,getRotationMatrix(randInt(randInt(12)))
+    let m = [getRotationMatrix(randInt(12) * 15)
             ,getScalingMatrix([randInt(2), randInt(2)])
-            ,getTranslationMatrix([randInt(6), randInt(6)])];
+            ,getTranslationMatrix([randInt(10)*15, randInt(10)*15])];
 
-    let count = randInt(4);
+    let count = randInt(3);
     m.sort(() => Math.random() - 0.5);
     result = [[1,0,0],[0,1,0],[0,0,1]];
     for (let i = 0; i < count; i++) {
@@ -67,3 +70,4 @@ function getRandomMatrix() {
     }
     return result;
 }
+

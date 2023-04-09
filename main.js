@@ -1,15 +1,40 @@
 window.addEventListener('load', () => {
   mainFunc();
   const addMatrixButton = document.getElementById('addMatrix');
-   addMatrixButton.addEventListener('click', createNewMatrix);
+  addMatrixButton.addEventListener('click', createNewMatrix);
 
-   createNewMatrix();
+  const testButton = document.getElementById('test');
+  testButton.addEventListener('click', setNewTarget);
+ 
+  const clearTestButton = document.getElementById('clear');
+  clearTestButton.addEventListener('click', clearTest);
+
+  createNewMatrix();
 });
 
+function setNewTarget() {
+  const startCoords = [[-2 * grid_size,-2 * grid_size, 1]
+                        ,[2 * grid_size,-2 * grid_size, 1]
+                        ,[2 * grid_size ,2 * grid_size, 1]
+                        ,[-2 * grid_size,2 * grid_size, 1]]
+  targetCoords = new Array(4);
+  tmpMatrix = getRandomMatrix();
+
+  for(let i = 0; i < 4; i++) {
+    targetCoords[i] = calculateTransformation(tmpMatrix, startCoords[i]);
+  }
+  mainFunc();
+}
+
+function clearTest() {
+  targetCoords = null;
+  mainFunc();
+}
+
+let targetCoords = null;
+const grid_size = 15;
 
 function mainFunc() {
-    const grid_size = 15
-
     // const ogCoords = [[0 * grid_size,0 * grid_size],[5 * grid_size,0 * grid_size],
     //                  [5 * grid_size ,-5 * grid_size],[0 * grid_size,-5 * grid_size]]
 
@@ -34,6 +59,19 @@ function mainFunc() {
     
     ctx.closePath();
     ctx.fill();
+
+    if (targetCoords) {
+      // ctx.fillStyle = '#0f0';
+      ctx.fillStyle = "rgba(0,0,255,0.6)"
+      ctx.beginPath();
+      ctx.moveTo(targetCoords[0][0], targetCoords[0][1]);
+      ctx.lineTo(targetCoords[1][0], targetCoords[1][1]);
+      ctx.lineTo(targetCoords[2][0], targetCoords[2][1]);
+      ctx.lineTo(targetCoords[3][0], targetCoords[3][1]);
+
+      ctx.closePath();
+      ctx.fill();
+    }
 
     const newCoords = new Array(4)
 
@@ -65,6 +103,8 @@ function mainFunc() {
     ctx.closePath();
     ctx.fill();
 }
+
+
 
 
 function calculateTransformation (matrix, ogCoords) {

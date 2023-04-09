@@ -41,3 +41,14 @@ margin-right: 5px;
     width:fit-content;
     margin-left: 40px;
 }
+
+#testButtons {
+    margin-top: 40px;
+    margin-left: 40px;
+}
+
+#testButtons button {
+    padding: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
