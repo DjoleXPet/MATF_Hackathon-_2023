@@ -34,3 +34,36 @@ function getShearingXMatrix(lambda) {
 function getShearingYMatrix(lambda) {
     return [[1, 0, 0], [lambda, 1, 0], [0, 0, 1]];
 }
+
+function multiplyMatrices(A, B) {
+    let rowsA = A.length;
+    let colsA = A[0].length;
+    let rowsB = B.length;
+    let colsB = B[0].length;
+    let C = new Array(rowsA);
+    for (let i = 0; i < rowsA; i++) {
+      C[i] = new Array(colsB);
+      for (let j = 0; j < colsB; j++) {
+        C[i][j] = 0;
+        for (let k = 0; k < colsA; k++) {
+          C[i][j] += A[i][k] * B[k][j];
+        }
+      }
+    }
+    return C;
+}
+
+function getRandomMatrix() {
+    let m = [getReflexionMatrix([randInt(5), randInt(5)])
+            ,getRotationMatrix(randInt(randInt(12)))
+            ,getScalingMatrix([randInt(2), randInt(2)])
+            ,getTranslationMatrix([randInt(6), randInt(6)])];
+
+    let count = randInt(4);
+    m.sort(() => Math.random() - 0.5);
+    result = [[1,0,0],[0,1,0],[0,0,1]];
+    for (let i = 0; i < count; i++) {
+        result = multiplyMatrices(result,m[i]);
+    }
+    return result;
+}
