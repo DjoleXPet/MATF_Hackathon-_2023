@@ -9,6 +9,13 @@
             
                 <canvas id="mainCanvas" width="1000" height="500" style="border:1px solid #d3d3d3;"></canvas>
                 
+                <p id="help">
+                    To add a new matrix select from a drop-down list and click "+".   
+                    <br> To remove a matrix click "X".
+                    <br>To change order of matrix click on "<" and  ">".
+                    <br>To write your own figure click on "Start figure" and then click on canvas to add vertices. When you are done click "End figure" or "Cancel figure" to revert to default.
+                    <br>To test your knowledge click on "Add new target" and then try to find transformations used to create generated shape.
+                </p>
                 <div id="matrices">
                     <div id="queue">
                         
@@ -22,9 +29,6 @@
                         <option value="translation">Translation</option>
                         <option value="rotation">Rotation</option>
                         <option value="scaling">Scaling</option>
-                        <!-- <option value="reflection">Reflection</option>
-                        <option value="shearingX">shearing X</option>
-                        <option value="shearingY">shearing Y</option> -->
                     </select>  
 
                     <div style="padding-top: 40px; font-size:xx-large; font-weight: bolder;">
@@ -56,16 +60,16 @@
 
         <div id="buttonWrapper">
             <div id="drawButtons">
-                <button id="startFigure">Start Figure</button>
-                <button id="endFigure">End Figure</button>
-                <button id="clearFigure" onclick="clearFigure()">Clear Figure</button>
-                
+                <button id="startFigure">Start figure</button>
+                <button id="endFigure">End figure</button>
+                <button id="clearFigure" onclick="clearFigure()">Clear figure</button>
             </div>
             <div id="testButtons">
                 <button id="test">Add new target</button>
                 <button id="clear">Clear target</button>
             </div>
 
+            <button id="toggleHelp" onclick="hideHelp()">Toggle Help</button>
         </div>
 
 

@@ -8,6 +8,7 @@ window.addEventListener('load', () => {
  
   const clearTestButton = document.getElementById('clear');
   clearTestButton.addEventListener('click', clearTest);
+
   const startFigureButton = document.getElementById('startFigure');
   startFigureButton.addEventListener('click', startFigure);
 
@@ -18,15 +19,11 @@ window.addEventListener('load', () => {
 });
 
 let drawInProgress = false;
+let targetCoords = null;
+const grid_size = 15
+let ogCoords = [[-2 * grid_size,-2 * grid_size, 1],[2 * grid_size,-2 * grid_size, 1],
+                [2 * grid_size ,2 * grid_size, 1],[-2 * grid_size,2 * grid_size, 1]]
 
-function endFigure() {
-  drawInProgress = false;
-  let canvas = document.getElementById("mainCanvas");
-
-  canvas.removeEventListener('mousedown', getCursorPosition)
-  console.log('removed listener')
-  mainFunc();
-}
 
 function setNewTarget() {
   const startCoords = [[-2 * grid_size,-2 * grid_size, 1]
@@ -34,7 +31,7 @@ function setNewTarget() {
                         ,[2 * grid_size ,2 * grid_size, 1]
                         ,[-2 * grid_size,2 * grid_size, 1]]
   targetCoords = new Array(4);
-  tmpMatrix = getRandomMatrix();
+  const tmpMatrix = getRandomMatrix();
 
   for(let i = 0; i < 4; i++) {
     targetCoords[i] = calculateTransformation(tmpMatrix, startCoords[i]);
@@ -47,47 +44,35 @@ function clearTest() {
   mainFunc();
 }
 
-let targetCoords = null;
-
-
-const grid_size = 15
-let ogCoords = [[-2 * grid_size,-2 * grid_size, 1],[2 * grid_size,-2 * grid_size, 1],
-                [2 * grid_size ,2 * grid_size, 1],[-2 * grid_size,2 * grid_size, 1]]
-
 function startFigure() {
-  var c = document.getElementById("mainCanvas");
+  const c = document.getElementById("mainCanvas");
   ogCoords = []
   drawInProgress = true
   c.addEventListener('mousedown', getCursorPosition)
 }
 
-// function positionFunction(e, c) {
-
-//   getCursorPosition(c, e)
-// }
+function endFigure() {
+  drawInProgress = false;
+  const canvas = document.getElementById("mainCanvas");
+  canvas.removeEventListener('mousedown', getCursorPosition)
+  mainFunc();
+}
 
 function clearFigure() {
   ogCoords = [[-2 * grid_size,-2 * grid_size, 1],[2 * grid_size,-2 * grid_size, 1],
               [2 * grid_size ,2 * grid_size, 1],[-2 * grid_size,2 * grid_size, 1]]
-  
-  
   drawInProgress = false;
-  let canvas = document.getElementById("mainCanvas");
-
+  const canvas = document.getElementById("mainCanvas");
   canvas.removeEventListener('mousedown', getCursorPosition)
-  console.log('removed listener')
   mainFunc()
 }
 
 
 const getCursorPosition = (event) => {
-  // if (numOfDots <= 0)
-  //   return  
-  let canvas = document.getElementById('mainCanvas')
+  const canvas = document.getElementById('mainCanvas')
   const rect = canvas.getBoundingClientRect()
   const x = event.clientX - rect.left - canvas.width /2
   const y = (event.clientY - rect.top - canvas.height/2)
-  console.log(x, y)
   ogCoords.push([x, y])
   mainFunc()
 }
@@ -95,43 +80,30 @@ const getCursorPosition = (event) => {
 
 
 function mainFunc() {
-    // const ogCoords = [[0 * grid_size,0 * grid_size],[5 * grid_size,0 * grid_size],
-    //                  [5 * grid_size ,-5 * grid_size],[0 * grid_size,-5 * grid_size]]
-
-  
-
-    var c = document.getElementById("mainCanvas");
-    var ctx = c.getContext('2d');
+    const c = document.getElementById("mainCanvas");
+    const ctx = c.getContext('2d');
     ctx.clearRect(-c.width, -c.height, 2*c.width, 2*c.height);
     ctx.reset()
-   // ctx.setTransform(1, 0, 0, 1, 0, 0);
 
     addGrid();
 
     if(drawInProgress){
-      for(dot of ogCoords) {
+      for(const dot of ogCoords) {
         ctx.fillStyle = "rgba(0,0,255,1)"
         ctx.fillRect(dot[0], dot[1], 2, 2)
-
       }
       return;
     }
     ctx.fillStyle = "rgba(255,0,0,0.2)"
     ctx.beginPath();
     ctx.moveTo(ogCoords[0][0], ogCoords[0][1]);
-    // ctx.lineTo(ogCoords[1][0], ogCoords[1][1]);
-    // ctx.lineTo(ogCoords[2][0], ogCoords[2][1]);
-    // ctx.lineTo(ogCoords[3][0], ogCoords[3][1]);
-
     for(let i = 1; i < ogCoords.length; i++) {
       ctx.lineTo(ogCoords[i][0], ogCoords[i][1]);
     }
-    
     ctx.closePath();
     ctx.fill();
 
     if (targetCoords) {
-      // ctx.fillStyle = '#0f0';
       ctx.fillStyle = "rgba(0,0,255,0.6)"
       ctx.beginPath();
       ctx.moveTo(targetCoords[0][0], targetCoords[0][1]);
@@ -144,17 +116,12 @@ function mainFunc() {
     }
 
     const newCoords = new Array(ogCoords.length)
-
-    // let matrix = loadMatrix();
-
-
-    matrices = loadMatrices()
-
-    matrix = composeMatrices(matrices) 
+    const matrices = loadMatrices()
+    const matrix = composeMatrices(matrices) 
 
     setResultMatrix(matrix);
 
-    matrix[0][2] = matrix[0][2]*grid_size
+    matrix[0][2] =  matrix[0][2]*grid_size
     matrix[1][2] = -matrix[1][2]*grid_size
     
     for (let i = 0; i < newCoords.length; i++) {
@@ -162,22 +129,15 @@ function mainFunc() {
         newCoords[i] = calculateTransformation(matrix, ogCoords[i])  
     }
 
-    // ctx.fillStyle = '#0f0';
     ctx.fillStyle = "rgba(0,255,0,0.6)"
     ctx.beginPath();
     ctx.moveTo(newCoords[0][0], newCoords[0][1]);
-    // ctx.lineTo(newCoords[1][0], newCoords[1][1]);
-    // ctx.lineTo(newCoords[2][0], newCoords[2][1]);
-    // ctx.lineTo(newCoords[3][0], newCoords[3][1]);
     for(let i = 1; i < newCoords.length; i++) {
       ctx.lineTo(newCoords[i][0], newCoords[i][1]);
     }
-
     ctx.closePath();
     ctx.fill();
 }
-
-
 
 
 function calculateTransformation (matrix, ogCoords) {
@@ -188,19 +148,18 @@ function calculateTransformation (matrix, ogCoords) {
 }
 
 function composeMatrices(matrices){
-  currentMatrix = [[1,0,0],[0,1,0],[0,0,1]]
+  let currentMatrix = [[1,0,0],[0,1,0],[0,0,1]]
 
-  for(m of matrices ) {
+  for(const m of matrices ) {
     currentMatrix = multiplyMatrices(currentMatrix, m)
   }
   return currentMatrix
 }
 
 function multiplyMatrices(A, B) {
-    let rowsA = A.length;
-    let colsA = A[0].length;
-    let rowsB = B.length;
-    let colsB = B[0].length;
+    const rowsA = A.length;
+    const colsA = A[0].length;
+    const colsB = B[0].length;
     let C = new Array(rowsA);
     for (let i = 0; i < rowsA; i++) {
       C[i] = new Array(colsB);
@@ -216,16 +175,6 @@ function multiplyMatrices(A, B) {
 
   function setResultMatrix(matrix) {
     const resMatrix = document.getElementById('resultMatrix');
-    /*let i = 0;
-    for (const row of resMatrix.rows) {
-      let j = 0;
-      for (const td of row) {
-        td.textContent = matrix[i][j];
-        j++;
-      }
-      i++;
-    }*/
-
     for(let i = 0; i < 3; i++){
       for(let j = 0; j < 3; j++){
           resMatrix.rows[i].cells[j].textContent = Math.round(matrix[i][j] * 1000) / 1000;
@@ -235,12 +184,9 @@ function multiplyMatrices(A, B) {
 
   function loadMatrices () {
     const queue = document.getElementById('queue')
-    //console.log(queue.childNodes)
-    matrices = []
+    const matrices = []
     for( matrix of queue.children ) {
-      //console.log(matrix)
       matrices.push( loadMatrix(matrix.children[0]) )
-
     }
     return matrices
   }
@@ -248,8 +194,6 @@ function multiplyMatrices(A, B) {
 
   function loadMatrix(m) {
     let matrix = new Array(3)
-  //  console.log(document.getElementById("m1").rows[0].cells[2].children[0].value)
-
     if(m.className == 'rotation') {
       angle =  +m.children[0].value 
       angle = -(Math.PI / 180) * angle
@@ -268,11 +212,6 @@ function multiplyMatrices(A, B) {
       matrix[0] = [s1, 0, 0 ]
       matrix[1] = [0, s2, 0 ]
     }
-    else if(m.className == 'reflection') {
-      a1 = +m.children[0].value
-      a2 = +m.children[1].value
-      matrix = getReflexionMatrix([a1, a2])
-    }
     else{
       for(let i = 0; i < 2; i++){
         matrix[i] = new Array(3)
@@ -287,14 +226,8 @@ function multiplyMatrices(A, B) {
     }
 
   function removeMatrix(el) {
-    const table = el.parentElement;
-
-    /*if (table.previousSibling) {
-      table.previousSibling.remove();
-    } else if (table.nextSibling) {
-      table.nextSibling.remove();
-    }*/
-    table.remove();
+    const matrix = el.parentElement;
+    matrix.remove();
     mainFunc();
   }
 
@@ -334,22 +267,10 @@ function multiplyMatrices(A, B) {
         addRotationMatrix()
         break;
     
-      case 'reflection':
-        addReflectionMatrix()
-      break;
-  
       case 'scaling':
         addScaleMatrix()
         break;
-  
-      case 'shearingX':
-        addCustomMatrix()
-        break;
-      
-      case 'shearingY':
-        addCustomMatrix();
-        break;
-  
+
       default:
         break;
     }
@@ -381,15 +302,7 @@ function addCustomMatrix() {
       <button onclick="moveLeft(this)">&lt</button>
       <button onclick="moveRight(this)">&gt</button>
   `
-
-  /*
-  const timesText = document.createTextNode('X');
-  if (queue.children.length > 0) {
-    queue.appendChild(timesText);
-  }
-  */
   queue.appendChild(div);
-  
   mainFunc();
 }
   
@@ -470,4 +383,13 @@ function addReflectionMatrix() {
   `
   queue.appendChild(div);
   mainFunc();
+}
+
+function hideHelp() {
+  const p = document.getElementById('help');
+  if (p.style.display === 'none') {
+    p.style.display = 'block';
+  } else {
+    p.style.display = 'none';
+  }
 }

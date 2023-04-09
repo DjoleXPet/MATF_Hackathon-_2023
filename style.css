@@ -1,7 +1,7 @@
 #mainCanvas {
     margin: auto;
     display:block;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 h1 {
@@ -9,22 +9,21 @@ h1 {
 }
 
 #queue {
-display: flex;
-flex-direction: row;
-width:fit-content;
+    display: flex;
+    flex-direction: row;
+    width:fit-content;
 }
 
 .queue-element {
-flex: 1;
-background-color: #f9f9f9;
-padding: 10px;
-border: 1px solid #ccc;
-border-radius: 5px;
-cursor: move;
-display: inline-block;
-margin-left: 5px;
-margin-right: 5px;
-
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: move;
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .queue-element input {
@@ -40,6 +39,7 @@ margin-right: 5px;
     display: flex;
     width:fit-content;
     margin-left: 200px;
+    margin-top: 20px;
 }
 
 #testButtons {
@@ -72,4 +72,19 @@ margin-right: 5px;
 #buttonWrapper {
     margin-top: 40px;
     margin-left: 200px;
+}
+p {
+    margin: 2px;
+    /* text-align: center; */
+    background-color: #bdbab3;
+    border: 1px solid darkslategray;
+    width: 1000px;
+    margin:auto;
+}
+
+#toggleHelp {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    padding: 10px;
 }
