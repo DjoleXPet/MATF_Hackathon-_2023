@@ -43,12 +43,33 @@ margin-right: 5px;
 }
 
 #testButtons {
-    margin-top: 40px;
-    margin-left: 40px;
+    margin-top: 10px;
 }
 
 #testButtons button {
     padding: 10px;
     margin-left: 10px;
     margin-right: 10px;
+}
+
+#drawButton {
+    margin-top: 30px;
+    margin-left: 40px;
+}
+
+#drawButtons button{
+    padding: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#drawButtons input{
+    padding: 10px;
+    width: 70px;
+    
+}
+
+#buttonWrapper {
+    margin-top: 40px;
+    margin-left: 40px;
 }

@@ -54,10 +54,11 @@
 
         </div>
 
-        <div>
-            <div>
+        <div id="buttonWrapper">
+            <div id="drawButtons">
                 <button id="createFigure">Create Figure</button>
-                <input type="number" name="" id="numOfDots" value="0">
+                <label for="numPoints">Points: </label>
+                <input type="number" name="numPoints" id="numOfDots" min="0" value="0">
                 <button id="clearFigure" onclick="clearFigure()">Clear Figure</button>
                 
             </div>
