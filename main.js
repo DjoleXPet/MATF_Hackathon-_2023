@@ -13,8 +13,8 @@ function mainFunc() {
     // const ogCoords = [[0 * grid_size,0 * grid_size],[5 * grid_size,0 * grid_size],
     //                  [5 * grid_size ,-5 * grid_size],[0 * grid_size,-5 * grid_size]]
 
-    const ogCoords = [[0 * grid_size,0 * grid_size, 1],[5 * grid_size,0 * grid_size, 1],
-                      [5 * grid_size ,-5 * grid_size, 1],[0 * grid_size,-5 * grid_size, 1]]
+    const ogCoords = [[-2 * grid_size,-2 * grid_size, 1],[2 * grid_size,-2 * grid_size, 1],
+                      [2 * grid_size ,2 * grid_size, 1],[-2 * grid_size,2 * grid_size, 1]]
 
     var c = document.getElementById("mainCanvas");
     var ctx = c.getContext('2d');
@@ -24,7 +24,8 @@ function mainFunc() {
 
     addGrid();
     
-    ctx.fillStyle = '#f00';
+    //ctx.fillStyle = '#f00';
+    ctx.fillStyle = "rgba(255,0,0,0.2)"
     ctx.beginPath();
     ctx.moveTo(ogCoords[0][0], ogCoords[0][1]);
     ctx.lineTo(ogCoords[1][0], ogCoords[1][1]);
@@ -53,7 +54,8 @@ function mainFunc() {
         newCoords[i] = calculateTransformation(matrix, ogCoords[i])  
     }
 
-    ctx.fillStyle = '#0f0';
+    // ctx.fillStyle = '#0f0';
+    ctx.fillStyle = "rgba(0,255,0,0.6)"
     ctx.beginPath();
     ctx.moveTo(newCoords[0][0], newCoords[0][1]);
     ctx.lineTo(newCoords[1][0], newCoords[1][1]);
