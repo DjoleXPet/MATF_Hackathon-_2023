@@ -39,7 +39,7 @@ margin-right: 5px;
 #matrices {
     display: flex;
     width:fit-content;
-    margin-left: 40px;
+    margin-left: 200px;
 }
 
 #testButtons {
@@ -71,5 +71,5 @@ margin-right: 5px;
 
 #buttonWrapper {
     margin-top: 40px;
-    margin-left: 40px;
+    margin-left: 200px;
 }

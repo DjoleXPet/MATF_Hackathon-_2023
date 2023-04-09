@@ -8,11 +8,25 @@ window.addEventListener('load', () => {
  
   const clearTestButton = document.getElementById('clear');
   clearTestButton.addEventListener('click', clearTest);
-  const createFigureButton = document.getElementById('createFigure');
-  createFigureButton.addEventListener('click', createFigure);
+  const startFigureButton = document.getElementById('startFigure');
+  startFigureButton.addEventListener('click', startFigure);
+
+  const endFigureButton = document.getElementById('endFigure');
+  endFigureButton.addEventListener('click', endFigure);
 
   createNewMatrix();
 });
+
+let drawInProgress = false;
+
+function endFigure() {
+  drawInProgress = false;
+  let canvas = document.getElementById("mainCanvas");
+
+  canvas.removeEventListener('mousedown', getCursorPosition)
+  console.log('removed listener')
+  mainFunc();
+}
 
 function setNewTarget() {
   const startCoords = [[-2 * grid_size,-2 * grid_size, 1]
@@ -34,22 +48,16 @@ function clearTest() {
 }
 
 let targetCoords = null;
-let numOfDots = 0
 
 
 const grid_size = 15
 let ogCoords = [[-2 * grid_size,-2 * grid_size, 1],[2 * grid_size,-2 * grid_size, 1],
                 [2 * grid_size ,2 * grid_size, 1],[-2 * grid_size,2 * grid_size, 1]]
 
-function createFigure() {
+function startFigure() {
   var c = document.getElementById("mainCanvas");
   ogCoords = []
-  numOfDots = +document.getElementById('numOfDots').value
-
-  if(numOfDots <= 0)
-    return
-
-
+  drawInProgress = true
   c.addEventListener('mousedown', getCursorPosition)
 }
 
@@ -61,7 +69,13 @@ function createFigure() {
 function clearFigure() {
   ogCoords = [[-2 * grid_size,-2 * grid_size, 1],[2 * grid_size,-2 * grid_size, 1],
               [2 * grid_size ,2 * grid_size, 1],[-2 * grid_size,2 * grid_size, 1]]
-  numOfDots = 0
+  
+  
+  drawInProgress = false;
+  let canvas = document.getElementById("mainCanvas");
+
+  canvas.removeEventListener('mousedown', getCursorPosition)
+  console.log('removed listener')
   mainFunc()
 }
 
@@ -75,14 +89,6 @@ const getCursorPosition = (event) => {
   const y = (event.clientY - rect.top - canvas.height/2)
   console.log(x, y)
   ogCoords.push([x, y])
-  numOfDots--;
-  console.log(numOfDots)
-  if(numOfDots <= 0) {
-    canvas.removeEventListener('mousedown', getCursorPosition)
-    console.log('removed listener')
-    numOfDots = 0;
-    
-  }
   mainFunc()
 }
 
@@ -102,15 +108,12 @@ function mainFunc() {
 
     addGrid();
 
-    if(numOfDots > 0 ){
+    if(drawInProgress){
       for(dot of ogCoords) {
         ctx.fillStyle = "rgba(0,0,255,1)"
         ctx.fillRect(dot[0], dot[1], 2, 2)
 
       }
-
-
-
       return;
     }
     ctx.fillStyle = "rgba(255,0,0,0.2)"
