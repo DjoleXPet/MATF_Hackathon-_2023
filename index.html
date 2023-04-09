@@ -5,24 +5,53 @@
     </head>
     <body>
         <div id="wrapper">
+                <h1>Matrix Wizard 3000</h1>
             
                 <canvas id="mainCanvas" width="500" height="500" style="border:1px solid #d3d3d3;"></canvas>
-                <div id="queue">
-                    
+                
+                <div id="matrices">
+                    <div id="queue">
+                        
+                    </div>
+
+                    <button id="addMatrix" style="margin-left:30px">
+                        +
+                    </button>
+                    <select class="select" name="" id="" style="margin-left:10px;margin-right:20px">
+                        <option value="custom">Custom</option>
+                        <option value="translation">Translation</option>
+                        <option value="rotation">Rotation</option>
+                        <option value="reflection">Reflection</option>
+                        <option value="scaling">Scaling</option>
+                        <option value="shearingX">shearing X</option>
+                        <option value="shearingY">shearing Y</option>
+                    </select>  
+
+                    <div style="padding-top: 40px; font-size:xx-large; font-weight: bolder;">
+                        =
+                    </div>
+
+                    <div class="queue-element">
+                        <table id="resultMatrix">
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
 
-                <button id="addMatrix">
-                    +
-                </button>
-                <select class="select" name="" id="">
-                    <option value="custom">Custom</option>
-                    <option value="translation">Translation</option>
-                    <option value="rotation">Rotation</option>
-                    <option value="reflection">Reflection</option>
-                    <option value="scaling">Scaling</option>
-                    <option value="shearingX">shearing X</option>
-                    <option value="shearingY">shearing Y</option>
-                </select>  
         </div>
         <script src="grid.js"></script>
         <script src="main.js">

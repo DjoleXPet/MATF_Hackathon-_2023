@@ -1,22 +1,21 @@
-#wrapper {
-    width: 100%;
-}
-
 #mainCanvas {
     margin: auto;
+    display:block;
+    margin-bottom: 40px;
 }
 
+h1 {
+    text-align: center;
+}
 
-.queue {
+#queue {
 display: flex;
 flex-direction: row;
-gap: 10px;
-padding: 10px;
-border: 1px solid #ccc;
-border-radius: 5px;
+width:fit-content;
 }
 
 .queue-element {
+flex: 1;
 background-color: #f9f9f9;
 padding: 10px;
 border: 1px solid #ccc;
@@ -25,4 +24,20 @@ cursor: move;
 display: inline-block;
 margin-left: 5px;
 margin-right: 5px;
+
+}
+
+.queue-element input {
+    width: 40px;
+}
+
+#resultMatrix td {
+    width: 40px;
+    border: 1px solid gray;
+}
+
+#matrices {
+    display: flex;
+    width:fit-content;
+    margin-left: 40px;
 }
