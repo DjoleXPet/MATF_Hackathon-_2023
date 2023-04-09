@@ -60,9 +60,9 @@ function multiplyMatrices(A, B) {
 function getRandomMatrix() {
     let m = [getRotationMatrix(randInt(12) * 15)
             ,getScalingMatrix([randInt(2), randInt(2)])
-            ,getTranslationMatrix([randInt(10)*15, randInt(10)*15])];
+            ,getTranslationMatrix([randInt(12)*15, randInt(8)*15])];
 
-    let count = randInt(3);
+    let count = m.length;
     m.sort(() => Math.random() - 0.5);
     result = [[1,0,0],[0,1,0],[0,0,1]];
     for (let i = 0; i < count; i++) {
