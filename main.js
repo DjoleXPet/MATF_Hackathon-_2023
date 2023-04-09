@@ -8,6 +8,8 @@ window.addEventListener('load', () => {
  
   const clearTestButton = document.getElementById('clear');
   clearTestButton.addEventListener('click', clearTest);
+  const createFigureButton = document.getElementById('createFigure');
+  createFigureButton.addEventListener('click', createFigure);
 
   createNewMatrix();
 });
@@ -32,14 +34,65 @@ function clearTest() {
 }
 
 let targetCoords = null;
-const grid_size = 15;
+let numOfDots = 0
+
+
+const grid_size = 15
+let ogCoords = [[-2 * grid_size,-2 * grid_size, 1],[2 * grid_size,-2 * grid_size, 1],
+                [2 * grid_size ,2 * grid_size, 1],[-2 * grid_size,2 * grid_size, 1]]
+
+function createFigure() {
+  var c = document.getElementById("mainCanvas");
+  ogCoords = []
+  numOfDots = +document.getElementById('numOfDots').value
+
+  if(numOfDots <= 0)
+    return
+
+
+  c.addEventListener('mousedown', getCursorPosition)
+}
+
+// function positionFunction(e, c) {
+
+//   getCursorPosition(c, e)
+// }
+
+function clearFigure() {
+  ogCoords = [[-2 * grid_size,-2 * grid_size, 1],[2 * grid_size,-2 * grid_size, 1],
+              [2 * grid_size ,2 * grid_size, 1],[-2 * grid_size,2 * grid_size, 1]]
+  numOfDots = 0
+  mainFunc()
+}
+
+
+const getCursorPosition = (event) => {
+  // if (numOfDots <= 0)
+  //   return  
+  let canvas = document.getElementById('mainCanvas')
+  const rect = canvas.getBoundingClientRect()
+  const x = event.clientX - rect.left - canvas.width /2
+  const y = (event.clientY - rect.top - canvas.height/2)
+  console.log(x, y)
+  ogCoords.push([x, y])
+  numOfDots--;
+  console.log(numOfDots)
+  if(numOfDots <= 0) {
+    canvas.removeEventListener('mousedown', getCursorPosition)
+    console.log('removed listener')
+    numOfDots = 0;
+    
+  }
+  mainFunc()
+}
+
+
 
 function mainFunc() {
     // const ogCoords = [[0 * grid_size,0 * grid_size],[5 * grid_size,0 * grid_size],
     //                  [5 * grid_size ,-5 * grid_size],[0 * grid_size,-5 * grid_size]]
 
-    const ogCoords = [[-2 * grid_size,-2 * grid_size, 1],[2 * grid_size,-2 * grid_size, 1],
-                      [2 * grid_size ,2 * grid_size, 1],[-2 * grid_size,2 * grid_size, 1]]
+  
 
     var c = document.getElementById("mainCanvas");
     var ctx = c.getContext('2d');
@@ -48,14 +101,28 @@ function mainFunc() {
    // ctx.setTransform(1, 0, 0, 1, 0, 0);
 
     addGrid();
-    
-    //ctx.fillStyle = '#f00';
+
+    if(numOfDots > 0 ){
+      for(dot of ogCoords) {
+        ctx.fillStyle = "rgba(0,0,255,1)"
+        ctx.fillRect(dot[0], dot[1], 2, 2)
+
+      }
+
+
+
+      return;
+    }
     ctx.fillStyle = "rgba(255,0,0,0.2)"
     ctx.beginPath();
     ctx.moveTo(ogCoords[0][0], ogCoords[0][1]);
-    ctx.lineTo(ogCoords[1][0], ogCoords[1][1]);
-    ctx.lineTo(ogCoords[2][0], ogCoords[2][1]);
-    ctx.lineTo(ogCoords[3][0], ogCoords[3][1]);
+    // ctx.lineTo(ogCoords[1][0], ogCoords[1][1]);
+    // ctx.lineTo(ogCoords[2][0], ogCoords[2][1]);
+    // ctx.lineTo(ogCoords[3][0], ogCoords[3][1]);
+
+    for(let i = 1; i < ogCoords.length; i++) {
+      ctx.lineTo(ogCoords[i][0], ogCoords[i][1]);
+    }
     
     ctx.closePath();
     ctx.fill();
@@ -73,7 +140,7 @@ function mainFunc() {
       ctx.fill();
     }
 
-    const newCoords = new Array(4)
+    const newCoords = new Array(ogCoords.length)
 
     // let matrix = loadMatrix();
 
@@ -96,9 +163,12 @@ function mainFunc() {
     ctx.fillStyle = "rgba(0,255,0,0.6)"
     ctx.beginPath();
     ctx.moveTo(newCoords[0][0], newCoords[0][1]);
-    ctx.lineTo(newCoords[1][0], newCoords[1][1]);
-    ctx.lineTo(newCoords[2][0], newCoords[2][1]);
-    ctx.lineTo(newCoords[3][0], newCoords[3][1]);
+    // ctx.lineTo(newCoords[1][0], newCoords[1][1]);
+    // ctx.lineTo(newCoords[2][0], newCoords[2][1]);
+    // ctx.lineTo(newCoords[3][0], newCoords[3][1]);
+    for(let i = 1; i < newCoords.length; i++) {
+      ctx.lineTo(newCoords[i][0], newCoords[i][1]);
+    }
 
     ctx.closePath();
     ctx.fill();
