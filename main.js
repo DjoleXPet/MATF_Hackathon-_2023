@@ -1,9 +1,9 @@
 window.addEventListener('load', () => {
   mainFunc();
   const addMatrixButton = document.getElementById('addMatrix');
-   addMatrixButton.addEventListener('click', addNewMatrix);
+   addMatrixButton.addEventListener('click', createNewMatrix);
 
-   addNewMatrix();
+   createNewMatrix();
 });
 
 
@@ -114,11 +114,32 @@ function multiplyMatrices(A, B) {
   function loadMatrix(m) {
     let matrix = new Array(3)
   //  console.log(document.getElementById("m1").rows[0].cells[2].children[0].value)
-    for(let i = 0; i < 2; i++){
+
+    if(m.className == 'rotation') {
+      angle =  +m.children[0].value 
+      angle = -(Math.PI / 180) * angle
+      matrix[0] = [Math.cos(angle), -Math.sin(angle), 0 ]
+      matrix[1] = [Math.sin(angle),  Math.cos(angle), 0 ]
+    }
+    else if(m.className == 'translation') {
+      b1 = +m.children[0].value
+      b2 = +m.children[1].value
+      matrix[0] = [1, 0, b1 ]
+      matrix[1] = [0, 1, b2 ]
+    }
+    else if(m.className == 'scaling') {
+      s1 = +m.children[0].value
+      s2 = +m.children[1].value
+      matrix[0] = [s1, 0, 0 ]
+      matrix[1] = [0, s2, 0 ]
+    }
+    else{
+      for(let i = 0; i < 2; i++){
         matrix[i] = new Array(3)
         for(let j = 0; j < 3; j++){
             matrix[i][j]  = +m.rows[i].cells[j].children[0].value
         }
+      }
     }
     matrix[2] = [0,0,1]
 
@@ -127,38 +148,13 @@ function multiplyMatrices(A, B) {
 
   function removeMatrix(el) {
     const table = el.parentElement;
-    table.remove();
-    mainFunc();
-  }
 
-  function addNewMatrix() {
-    const queue = document.getElementById('queue')
-    const div = document.createElement('div');
-    div.className = 'queue-element';
-    div.draggable = 'true';
-    div.innerHTML = `
-        <table>
-            <tr>
-                <td><input type="number" onchange="mainFunc()" name=""  value="1"></td>
-                <td><input type="number" onchange="mainFunc()" name=""  value="0"></td>
-                <td><input type="number" onchange="mainFunc()" name=""  value="0"></td>
-            </tr>
-            <tr>
-                <td><input type="number" onchange="mainFunc()" name=""  value="0"></td>
-                <td><input type="number" onchange="mainFunc()" name=""  value="1"></td>
-                <td><input type="number" onchange="mainFunc()" name=""  value="0"></td>
-            </tr>
-            <tr>
-                <td>0</td>
-                <td>0</td>
-                <td>1</td>
-            </tr>
-        </table>
-        <button onclick="removeMatrix(this)">X</button>
-        <button onclick="moveLeft(this)">&lt</button>
-        <button onclick="moveRight(this)">&gt</button>
-    `
-    queue.appendChild(div);
+    if (table.previousSibling) {
+      table.previousSibling.remove();
+    } else if (table.nextSibling) {
+      table.nextSibling.remove();
+    }
+    table.remove();
     mainFunc();
   }
 
@@ -181,4 +177,133 @@ function multiplyMatrices(A, B) {
     mainFunc();
   }
 
+  function createNewMatrix() {
+    const select = document.querySelector('.select');
+    select.style.display = 'unset';
+    
+    switch (select.value) {
+      case 'custom':
+        addCustomMatrix()
+        break;
   
+      case 'translation':
+        addTranslationMatrix()
+        break;
+  
+      case 'rotation':
+        addRotationMatrix()
+        break;
+    
+      case 'reflection':
+      addCustomMatrix()
+      break;
+  
+      case 'scaling':
+        addScaleMatrix()
+        break;
+  
+      case 'shearingX':
+        addCustomMatrix()
+        break;
+      
+      case 'shearingY':
+        addCustomMatrix();
+        break;
+  
+      default:
+        break;
+    }
+  }
+  
+function addCustomMatrix() {
+  const queue = document.getElementById('queue')
+  const div = document.createElement('div');
+  div.className = 'queue-element';
+  div.innerHTML = `
+      <table>
+          <tr>
+              <td><input type="number" onchange="mainFunc()" name=""  value="1"></td>
+              <td><input type="number" onchange="mainFunc()" name=""  value="0"></td>
+              <td><input type="number" onchange="mainFunc()" name=""  value="0"></td>
+          </tr>
+          <tr>
+              <td><input type="number" onchange="mainFunc()" name=""  value="0"></td>
+              <td><input type="number" onchange="mainFunc()" name=""  value="1"></td>
+              <td><input type="number" onchange="mainFunc()" name=""  value="0"></td>
+          </tr>
+          <tr>
+              <td>0</td>
+              <td>0</td>
+              <td>1</td>
+          </tr>
+      </table>
+      <button onclick="removeMatrix(this)">X</button>
+      <button onclick="moveLeft(this)">&lt</button>
+      <button onclick="moveRight(this)">&gt</button>
+  `
+
+  const timesText = document.createTextNode('X');
+  if (queue.children.length > 0) {
+    queue.appendChild(timesText);
+  }
+  
+  queue.appendChild(div);
+  
+  mainFunc();
+}
+  
+function addRotationMatrix() {
+  const queue = document.getElementById('queue')
+  const div = document.createElement('div');
+  div.className = 'queue-element';
+  div.innerHTML = `
+      <div class="rotation">
+      R(
+      <input type='number' onchange="mainFunc()" value='0'>
+      )
+      </div>
+      <button onclick="removeMatrix(this)">X</button>
+      <button onclick="moveLeft(this)">&lt</button>
+      <button onclick="moveRight(this)">&gt</button>
+  `
+  queue.appendChild(div);
+  mainFunc();
+}
+
+function addTranslationMatrix() {
+  const queue = document.getElementById('queue')
+  const div = document.createElement('div');
+  div.className = 'queue-element';
+  div.innerHTML = `
+      <div class="translation">
+      T(
+      <input type='number' onchange="mainFunc()" value='0'>
+      <input type='number' onchange="mainFunc()" value='0'>
+      )
+      </div>
+      <button onclick="removeMatrix(this)">X</button>
+      <button onclick="moveLeft(this)">&lt</button>
+      <button onclick="moveRight(this)">&gt</button>
+  `
+  queue.appendChild(div);
+  mainFunc();
+}
+
+function addScaleMatrix() {
+  const queue = document.getElementById('queue')
+  const div = document.createElement('div');
+  div.className = 'queue-element';
+  div.innerHTML = `
+      <div class="scaling">
+      S(
+      <input type='number' onchange="mainFunc()" value='1'>
+      <input type='number' onchange="mainFunc()" value='1'>
+      )
+      </div>
+      <button onclick="removeMatrix(this)">X</button>
+      <button onclick="moveLeft(this)">&lt</button>
+      <button onclick="moveRight(this)">&gt</button>
+  `
+  queue.appendChild(div);
+  mainFunc();
+}
